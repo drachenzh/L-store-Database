@@ -3,5 +3,7 @@ This is a quarter-long course project conducted in ECS 165A Database System at U
 
 # Milestones
 Milestone 1: Single-threaded, in-memory L-Store.
+
 Milestone 2: Two-threads, second thread on merge, buffer is a fixed size in memory and the rest of the database is stored on disk/file.
+
 Milestone 3: Multi-threaded, in-memory & Durable L-Store.
