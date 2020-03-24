@@ -31,7 +31,7 @@ for i in range(num_threads):
 # generates 10k random transactions
 # each transaction will increment the first column of a record 5 times
 
-for i in range(1000):
+for i in range(100):
     k = randint(0, 2000 - 1)
     # k = 3
     transaction = Transaction()
@@ -68,3 +68,6 @@ if s != num_committed_transactions * 5:
     print('Expected sum:', num_committed_transactions * 5, ', actual:', s, '. Failed.')
 else:
     print('Pass.')
+
+
+db.close()

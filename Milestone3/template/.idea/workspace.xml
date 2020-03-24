@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="03305fae-207b-4521-bd36-5f975b52f3d2" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/buffer.py" beforeDir="false" afterPath="$PROJECT_DIR$/buffer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.py" beforeDir="false" afterPath="$PROJECT_DIR$/db.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/query.py" beforeDir="false" afterPath="$PROJECT_DIR$/query.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/table.py" beforeDir="false" afterPath="$PROJECT_DIR$/table.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/transaction.py" beforeDir="false" afterPath="$PROJECT_DIR$/transaction.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/transaction_tester.py" beforeDir="false" afterPath="$PROJECT_DIR$/transaction_tester.py" afterDir="false" />
     </list>
@@ -25,7 +26,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/transaction_tester.py" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RunManager">
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
@@ -93,29 +94,38 @@
       <screen x="0" y="0" width="1500" height="960" />
     </state>
     <state x="532" y="194" key="#com.intellij.ide.macro.MacrosDialog/0.0.1500.960/3000.0.1920.1040@0.0.1500.960" timestamp="1584998356054" />
-    <state x="532" y="244" key="FileChooserDialogImpl" timestamp="1584998294859">
+    <state x="532" y="244" key="FileChooserDialogImpl" timestamp="1585000180527">
       <screen x="0" y="0" width="1500" height="960" />
     </state>
-    <state x="532" y="244" key="FileChooserDialogImpl/0.0.1500.960/3000.0.1920.1040@0.0.1500.960" timestamp="1584998294859" />
-    <state width="1480" height="256" key="GridCell.Tab.0.bottom" timestamp="1584999461986">
-      <screen x="0" y="0" width="1500" height="960" />
-    </state>
-    <state width="1480" height="256" key="GridCell.Tab.0.bottom/0.0.1500.960/3000.0.1920.1040@0.0.1500.960" timestamp="1584999461986" />
-    <state width="1480" height="256" key="GridCell.Tab.0.center" timestamp="1584999461985">
-      <screen x="0" y="0" width="1500" height="960" />
-    </state>
-    <state width="1480" height="256" key="GridCell.Tab.0.center/0.0.1500.960/3000.0.1920.1040@0.0.1500.960" timestamp="1584999461985" />
-    <state width="1480" height="256" key="GridCell.Tab.0.left" timestamp="1584999461985">
-      <screen x="0" y="0" width="1500" height="960" />
-    </state>
-    <state width="1480" height="256" key="GridCell.Tab.0.left/0.0.1500.960/3000.0.1920.1040@0.0.1500.960" timestamp="1584999461985" />
-    <state width="1480" height="256" key="GridCell.Tab.0.right" timestamp="1584999461985">
-      <screen x="0" y="0" width="1500" height="960" />
-    </state>
-    <state width="1480" height="256" key="GridCell.Tab.0.right/0.0.1500.960/3000.0.1920.1040@0.0.1500.960" timestamp="1584999461985" />
-    <state x="3211" y="-33" width="1266" height="806" maximized="true" key="dock-window-1" timestamp="1584999610404">
+    <state x="532" y="244" key="FileChooserDialogImpl/0.0.1500.960/3000.0.1920.1040@0.0.1500.960" timestamp="1585000180527" />
+    <state width="1900" height="202" key="GridCell.Tab.0.bottom" timestamp="1585011753702">
       <screen x="3000" y="0" width="1920" height="1040" />
     </state>
+    <state width="1480" height="308" key="GridCell.Tab.0.bottom/0.0.1500.960/3000.0.1920.1040@0.0.1500.960" timestamp="1585002923639" />
+    <state width="1900" height="202" key="GridCell.Tab.0.bottom/0.0.1500.960/3000.0.1920.1040@3000.0.1920.1040" timestamp="1585011753702" />
+    <state width="1900" height="202" key="GridCell.Tab.0.center" timestamp="1585011753702">
+      <screen x="3000" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1480" height="308" key="GridCell.Tab.0.center/0.0.1500.960/3000.0.1920.1040@0.0.1500.960" timestamp="1585002923639" />
+    <state width="1900" height="202" key="GridCell.Tab.0.center/0.0.1500.960/3000.0.1920.1040@3000.0.1920.1040" timestamp="1585011753702" />
+    <state width="1900" height="202" key="GridCell.Tab.0.left" timestamp="1585011753702">
+      <screen x="3000" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1480" height="308" key="GridCell.Tab.0.left/0.0.1500.960/3000.0.1920.1040@0.0.1500.960" timestamp="1585002923639" />
+    <state width="1900" height="202" key="GridCell.Tab.0.left/0.0.1500.960/3000.0.1920.1040@3000.0.1920.1040" timestamp="1585011753702" />
+    <state width="1900" height="202" key="GridCell.Tab.0.right" timestamp="1585011753702">
+      <screen x="3000" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1480" height="308" key="GridCell.Tab.0.right/0.0.1500.960/3000.0.1920.1040@0.0.1500.960" timestamp="1585002923639" />
+    <state width="1900" height="202" key="GridCell.Tab.0.right/0.0.1500.960/3000.0.1920.1040@3000.0.1920.1040" timestamp="1585011753702" />
+    <state x="0" y="246" width="1512" height="799" maximized="true" key="dock-window-1" timestamp="1585009764270">
+      <screen x="0" y="0" width="1500" height="960" />
+    </state>
     <state x="3211" y="-33" width="1266" height="806" maximized="true" key="dock-window-1/0.0.1500.960/3000.0.1920.1040@0.0.1500.960" timestamp="1584999610404" />
+    <state x="0" y="246" width="1512" height="799" maximized="true" key="dock-window-1/0.0.1500.960/3000.0.1920.1040@3000.0.1920.1040" timestamp="1585009764270" />
+    <state x="413" y="206" width="672" height="678" key="search.everywhere.popup" timestamp="1585001554981">
+      <screen x="0" y="0" width="1500" height="960" />
+    </state>
+    <state x="413" y="206" width="672" height="678" key="search.everywhere.popup/0.0.1500.960/3000.0.1920.1040@0.0.1500.960" timestamp="1585001554981" />
   </component>
 </project>

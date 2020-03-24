@@ -31,7 +31,6 @@ class Database():
             self.tables[idi].merge_thread.join()
             for idj, j in enumerate(i.buffer_pool.buffer):
                 if (j):
-                    print(j.bookindex)
                     self.tables[idi].dump_book_json(j)
         del self #Rip database
 

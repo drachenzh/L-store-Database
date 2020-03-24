@@ -2,7 +2,7 @@
 class Buffer:
     #hello
     def __init__(self, key):
-        self.buffer_size = 36
+        self.buffer_size = 40
         self.book_range = 1
         self.buffer = [None]*self.buffer_size
         self.LRU_tracker = [None]*self.buffer_size  #least resently used makes it so we can keep track of old non used books with time stamps

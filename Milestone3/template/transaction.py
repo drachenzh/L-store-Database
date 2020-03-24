@@ -29,13 +29,19 @@ class Transaction:
     # t.add_query(q.update, 0, *[None, 1, None, 2, None])
     """
     def add_query(self, query, *args):
-        self.queries.append((query, args))
+        new_args = []
+        # convert arguments to a list instead of tuple
+        for x in args:
+            new_args.append(x)
+        new_args.append(self.transaction_id)     # append transcation_id to the list of args
+
+        self.queries.append((query, new_args))
 
     # If you choose to implement this differently this method must still return True if transaction commits or False on abort
 
     # This MUST return 0 if transaction is sucessful, else it must return 0
     def run(self):
-        # print("~Transaction # " + str(self.transaction_id))
+        print("~Transaction # " + str(self.transaction_id))
 
         for query, args in self.queries:
             key = args[0]
@@ -58,7 +64,7 @@ class Transaction:
             if exclusive:
                 self.updates.append(key)
 
-                query = Query(self.table)
+                #query = Query(self.table)
 
         return self.commit()
 
