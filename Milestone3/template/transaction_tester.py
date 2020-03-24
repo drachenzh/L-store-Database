@@ -7,14 +7,14 @@ import threading
 from random import choice, randint, sample, seed
 
 db = Database()
-db.open('db')
+db.open('ECS165')
 grades_table = db.create_table('Grades', 5, 0)
 
 keys = []
 records = {}
 num_threads = 8
 seed(8739878934)
-num_records = 1000
+num_records = 10000
 num_transactions = 100
 num_operations = 5
 
@@ -33,15 +33,8 @@ for i in range(num_threads):
 
 # generates 10k random transactions
 # each transaction will increment the first column of a record 5 times
-<<<<<<< Updated upstream
-
-for i in range(1000):
-    k = randint(0, 2000 - 1)
-    # k = 3
-=======
 for i in range(num_transactions):
     k = randint(0, num_records // num_operations - 1)
->>>>>>> Stashed changes
     transaction = Transaction()
     for j in range(num_operations):
         key = keys[k * num_operations + j]
@@ -75,8 +68,4 @@ if s != num_committed_transactions * num_operations:
 else:
     print('Pass.')
 
-<<<<<<< Updated upstream
 db.close()
-=======
-db.close()
->>>>>>> Stashed changes

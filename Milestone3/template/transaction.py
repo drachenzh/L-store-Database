@@ -35,14 +35,20 @@ class Transaction:
 
     # This MUST return 0 if transaction is sucessful, else it must return 0
     def run(self):
-        # print("~Transaction # " + str(self.transaction_id))
+        print("~Transaction # " + str(self.transaction_id))
 
         for query, args in self.queries:
-            result = query(*args)
-            # If the query has failed the transaction should abort
-            if result == False:
+            key = args[0]
+
+            exclusive = False
+            if query.__name__ == "increment":    # check if its write query
+                exclusive = True
+
+#
+            if self.secure_lock(key, exclusive) == False:
+                print("Aborting transaciton #" + str(self.transaction_id))
                 return self.abort()
-<<<<<<< Updated upstream
+         #
 
             if exclusive: # if we have secured a lock, pull the base and tail book and pin them
                 pin_list = self.table.pull_base_and_tail(key)
@@ -55,40 +61,8 @@ class Transaction:
                 self.updates.append(key)
 
                 query = Query(self.table)
-=======
-            else:
-                if query.__name__ == "increment":
-                    self.updates.append(args[0])
-                    pin_list = self.table.pull_base_and_tail(args[0])
-                    for pin in pin_list:
-                        self.pins.append(pin)
->>>>>>> Stashed changes
 
         return self.commit()
-        # for query, args in self.queries:
-        #     key = args[0]
-        #
-        #     exclusive = False
-        #     if query.__name__ == "increment":    # check if its write query
-        #         exclusive = True
-        #
-        #     if self.secure_lock(key, exclusive) == False:
-        #         print("Aborting transaciton #" + str(self.transaction_id))
-        #         return self.abort()
-        #
-        #     if exclusive: # if we have secured a lock, pull the base and tail book and pin them
-        #         pin_list = self.table.pull_base_and_tail(key)
-        #         for pin in pin_list:
-        #             self.pins.append(pin)
-        #
-        #     result = query(*args)      # calling the query and execute this query
-        #
-        #     if exclusive:
-        #         self.updates.append(key)
-        #
-        #         #query = Query(self.table)
-        #
-        # return self.commit()
 
     # exclusive = lock_type    lock_type = false is shared   true = exlcusive
     def secure_lock(self, key, exclusive):
