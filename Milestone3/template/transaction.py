@@ -35,7 +35,7 @@ class Transaction:
 
     # This MUST return 0 if transaction is sucessful, else it must return 0
     def run(self):
-        # print("~Transaction # " + str(self.transaction_id))
+        print("~Transaction # " + str(self.transaction_id))
 
         for query, args in self.queries:
             key = args[0]
@@ -44,9 +44,11 @@ class Transaction:
             if query.__name__ == "increment":    # check if its write query
                 exclusive = True
 
+#
             if self.secure_lock(key, exclusive) == False:
                 print("Aborting transaciton #" + str(self.transaction_id))
                 return self.abort()
+         #
 
             if exclusive: # if we have secured a lock, pull the base and tail book and pin them
                 pin_list = self.table.pull_base_and_tail(key)

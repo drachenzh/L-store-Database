@@ -3,7 +3,6 @@ from index import Index
 from book import *
 from record import Record
 import sys
-from  __init__ import writeLock
 
 
 INDIRECTION_COLUMN = 0
@@ -59,9 +58,7 @@ class Query:
             self.table.buffer_pool.buffer[idx] = Book(len(columns), self.table.book_index)
 
             lastw = [self.table.book_index, 0, idx]
-            global writeLock
-            with writeLock:
-                self.table.book_index += 1
+            self.table.book_index += 1
 
         # there is an available book.
         else:
@@ -226,8 +223,8 @@ class Query:
             location = self.table.buffer_pool.buffer[new_slot].book_insert(new_record)#add record to book
             self.table.buffer_pool.buffer[base_book_bp].set_flag(self.table.book_index) #set indirection flag in base book
 
-            with writeLock:
-                self.table.book_index += 1
+
+            self.table.book_index += 1
             pin_idx_list.append(new_slot)
 
         else: #there is an availabe book to write to
@@ -310,11 +307,11 @@ class Query:
         #i am assuming that we get the primary key but if we don't we will have to make small changes to the code to handle it
 
         rid = self.table.index[0].locate(key) #get the rid of the key
-        base_book_id, base_row = self.table.page_directory[rid] #get base book id and row of the base book record we wish to change the inderection
+        base_book_id, base_row, lock_list = self.table.page_directory[rid[0]] #get base book id and row of the base book record we wish to change the inderection
         base_book_bp = self.table.set_book(base_book_id)
 
         record_to_be_deleted_tid = self.table.buffer_pool.buffer[base_book_bp].get_indirection(base_row) #get the tid of the record we wish to get rid of
-        tail_book_id, tail_row = self.table.page_directory(record_to_be_deleted_tid) #get tail book info
+        tail_book_id, tail_row = self.table.page_directory[record_to_be_deleted_tid] #get tail book info
         tail_book_bp = self.table.set_book(tail_book_id)
         record = self.table.buffer_pool.buffer[tail_book_bp].get_full_record(tail_row)
 
