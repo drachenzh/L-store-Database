@@ -29,7 +29,13 @@ class Transaction:
     # t.add_query(q.update, 0, *[None, 1, None, 2, None])
     """
     def add_query(self, query, *args):
-        self.queries.append((query, args))
+        new_args = []
+        # convert arguments to a list instead of tuple
+        for x in args:
+            new_args.append(x)
+        new_args.append(self.transaction_id)     # append transcation_id to the list of args
+
+        self.queries.append((query, new_args))
 
     # If you choose to implement this differently this method must still return True if transaction commits or False on abort
 
@@ -44,11 +50,9 @@ class Transaction:
             if query.__name__ == "increment":    # check if its write query
                 exclusive = True
 
-#
             if self.secure_lock(key, exclusive) == False:
                 print("Aborting transaciton #" + str(self.transaction_id))
                 return self.abort()
-         #
 
             if exclusive: # if we have secured a lock, pull the base and tail book and pin them
                 pin_list = self.table.pull_base_and_tail(key)
@@ -60,7 +64,7 @@ class Transaction:
             if exclusive:
                 self.updates.append(key)
 
-                query = Query(self.table)
+                #query = Query(self.table)
 
         return self.commit()
 
