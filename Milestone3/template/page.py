@@ -19,8 +19,8 @@ class Page:
         bytevalue = (value).to_bytes(8, byteorder='big')
         i = self.num_records * 8
 
-        if self.num_records >= 512:
-            print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$checking i: " + str(self.num_records))
+        # if self.num_records >= 512:
+        #     print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$checking i: " + str(self.num_records))
 
         self.data[i + 0] = bytevalue[0]
         self.data[i + 1] = bytevalue[1]
@@ -106,7 +106,7 @@ class Page:
         self.data[rindex + 7] = bytevalue[7]
 
     def has_space(self):
-        if self.num_records < 512:
+        if self.num_records < 511:
             return True
         else:
             return False

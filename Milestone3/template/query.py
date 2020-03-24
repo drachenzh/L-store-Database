@@ -188,6 +188,7 @@ class Query:
         base_book_bp = self.table.set_book(location[0]) #now holds the location of where book is stored in bp
         check_indirection =  self.table.buffer_pool.buffer[base_book_bp].get_indirection(location[1])
         pin_idx_list.append(base_book_bp)
+        self.table.buffer_pool.pin(base_book_bp)
 
 
 
@@ -216,11 +217,23 @@ class Query:
         """
         NOW New_record holds the value that i wish to append to a tail book
         """
+
         indir_flag = self.table.buffer_pool.buffer[base_book_bp].book_indirection_flag
+
+
         if indir_flag == -1: #need a new tail book
             new_slot = self.table.make_room()   #make room
             self.table.buffer_pool.buffer[new_slot] = Book(len(columns), self.table.book_index) #add book
+            book_index = self.table.buffer_pool.buffer[new_slot].bookindex
+
+            while book_index in self.table.latch_book and self.table.latch_book[book_index] == True:
+                continue
+
+            self.table.latch_book[book_index] = True
             location = self.table.buffer_pool.buffer[new_slot].book_insert(new_record)#add record to book
+            self.table.latch_book[book_index] = False
+
+
             self.table.buffer_pool.buffer[base_book_bp].set_flag(self.table.book_index) #set indirection flag in base book
 
 
@@ -229,8 +242,17 @@ class Query:
 
         else: #there is an availabe book to write to
             slot = self.table.set_book(indir_flag) #bring tail book onto the bp
-            location = self.table.buffer_pool.buffer[slot].book_insert(new_record) #add record to book
+            book_index = self.table.buffer_pool.buffer[slot].bookindex
 
+
+            while book_index in self.table.latch_book and self.table.latch_book[book_index] == True:
+                continue
+
+            self.table.latch_book[book_index] = True
+            if self.table.buffer_pool.buffer[slot].is_full():
+                print("cao!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!      " + str(indir_flag))
+            location = self.table.buffer_pool.buffer[slot].book_insert(new_record) #add record to book
+            self.table.latch_book[book_index] = False
 
             pin_idx_list.append(slot)
             if self.table.buffer_pool.buffer[slot].is_full(): # tail book is full set flag to -1

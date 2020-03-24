@@ -24,6 +24,7 @@ class Book:
             print("ERROR: Trying to insert too many columns")
             exit()
 
+
         for idx, i in enumerate(columns):
             self.content[idx].write(i)
 
@@ -72,7 +73,7 @@ class Book:
 
     #returns true if book is full.
     def is_full(self):
-        if self.content[1].num_records < 512:
+        if self.content[1].num_records < 511:
             return False
         else:
             return True

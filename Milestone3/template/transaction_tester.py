@@ -7,7 +7,7 @@ import threading
 from random import choice, randint, sample, seed
 
 db = Database()
-db.open('ECS165')
+db.open('db')
 grades_table = db.create_table('Grades', 5, 0)
 
 keys = []
@@ -15,7 +15,7 @@ records = {}
 num_threads = 8
 seed(8739878934)
 num_records = 10000
-num_transactions = 100
+num_transactions = 1000
 num_operations = 5
 
 # Generate random records

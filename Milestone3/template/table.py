@@ -134,6 +134,8 @@ class Table:
                 tailind = self.set_book(index)
                 bid = self.buffer_pool.buffer[tailind].read(1,4)
                 baseindex = self.set_book(self.page_directory[bid][0])
+                self.buffer_pool.pin(baseindex)
+                self.buffer_pool.pin(tailind)
                 self.merge_base_and_tail(baseindex, tailind)
 
     def merge_base_and_tail(self, base_bp, tail_bp):
