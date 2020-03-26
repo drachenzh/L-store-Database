@@ -64,3 +64,8 @@ class Lock_List:
         prev.next = head_lock.next
         head_lock = None
 
+    def printList(self):
+        temp = self.head
+        while (temp):
+            print("Lock Type: " + str(temp.lock_type) + "  Transaction ID:  " + str(temp.tran_id))
+            temp = temp.next

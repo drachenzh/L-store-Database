@@ -389,5 +389,6 @@ class Table:
         lock_list = self.page_directory[rid][2]
         lock_list.remove_lock(tran_id)
 
+
         self.lock.release()
         return True

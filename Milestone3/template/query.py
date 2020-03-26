@@ -122,11 +122,9 @@ class Query:
                 temp_rec = Record(location[1], self.table.key, ([0] * self.table.num_columns))
                 records.append(temp_rec)
 
-        # self.table.latch_book[search_key] = False  # set the book to unlock
         return records
 
     def select(self, key, col, query_columns, tran_id):
-
         # acquire shared lock first
         if self.table.acquire_lock(key, 0, tran_id):
             # finish locking this record
@@ -275,7 +273,7 @@ class Query:
         for i in pin_idx_list:
             self.table.buffer_pool.unpin(i)
 
-
+        return True
 
 
 
