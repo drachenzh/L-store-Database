@@ -7,7 +7,7 @@ import threading
 from random import choice, randint, sample, seed
 
 db = Database()
-db.open('db')
+db.open('ecs165')
 grades_table = db.create_table('Grades', 5, 0)
 
 keys = []
@@ -66,6 +66,6 @@ s = query.sum(keys[0], keys[-1], 1)
 if s != num_committed_transactions * num_operations:
     print('Expected sum:', num_committed_transactions * num_operations, ', actual:', s, '. Failed.')
 else:
-    print('Pass.')
+    print('Pass.' + "Number of commited:" + str(num_committed_transactions))
 
 db.close()

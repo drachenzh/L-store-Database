@@ -1,6 +1,6 @@
 import threading
 threadLock = threading.Lock()
-
+writeLock = threading.Lock()
 global_counter = 0
 last_table = None
 
