@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="03305fae-207b-4521-bd36-5f975b52f3d2" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/buffer.py" beforeDir="false" afterPath="$PROJECT_DIR$/buffer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.py" beforeDir="false" afterPath="$PROJECT_DIR$/db.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/query.py" beforeDir="false" afterPath="$PROJECT_DIR$/query.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/transaction.py" beforeDir="false" afterPath="$PROJECT_DIR$/transaction.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/transaction_tester.py" beforeDir="false" afterPath="$PROJECT_DIR$/transaction_tester.py" afterDir="false" />
@@ -26,6 +24,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RunManager">
@@ -41,6 +40,7 @@
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/transaction_tester.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
@@ -51,17 +51,18 @@
       <method v="2" />
     </configuration>
     <configuration name="transaction_tester" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
-      <module name="template" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="" />
+      <option name="SDK_HOME" value="C:\Users\zhouw\AppData\Local\Programs\Python\Python38-32\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/transaction_tester.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
@@ -69,6 +70,34 @@
       <option name="MODULE_MODE" value="false" />
       <option name="REDIRECT_INPUT" value="false" />
       <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="Tox" factoryName="Tox">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Doctests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
       <method v="2" />
     </configuration>
   </component>
@@ -86,38 +115,44 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state x="206" y="135" width="1086" height="704" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1584998424968">
-      <screen x="0" y="0" width="1500" height="960" />
+    <state x="3264" y="146" width="1086" height="704" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1585265946938">
+      <screen x="3000" y="0" width="1920" height="1040" />
     </state>
     <state x="206" y="135" width="1086" height="704" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1500.960/3000.0.1920.1040@0.0.1500.960" timestamp="1584998424968" />
+    <state x="3264" y="146" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1500.960/3000.0.1920.1040@3000.0.1920.1040" timestamp="1585265946938" />
     <state x="532" y="194" key="#com.intellij.ide.macro.MacrosDialog" timestamp="1584998356054">
       <screen x="0" y="0" width="1500" height="960" />
     </state>
     <state x="532" y="194" key="#com.intellij.ide.macro.MacrosDialog/0.0.1500.960/3000.0.1920.1040@0.0.1500.960" timestamp="1584998356054" />
-    <state x="532" y="244" key="FileChooserDialogImpl" timestamp="1585000180527">
-      <screen x="0" y="0" width="1500" height="960" />
+    <state x="3681" y="264" key="FileChooserDialogImpl" timestamp="1585013486916">
+      <screen x="3000" y="0" width="1920" height="1040" />
     </state>
     <state x="532" y="244" key="FileChooserDialogImpl/0.0.1500.960/3000.0.1920.1040@0.0.1500.960" timestamp="1585000180527" />
-    <state width="1900" height="202" key="GridCell.Tab.0.bottom" timestamp="1585011753702">
+    <state x="3681" y="264" key="FileChooserDialogImpl/0.0.1500.960/3000.0.1920.1040@3000.0.1920.1040" timestamp="1585013486916" />
+    <state width="834" height="912" key="GridCell.Tab.0.bottom" timestamp="1585280169596">
       <screen x="3000" y="0" width="1920" height="1040" />
     </state>
     <state width="1480" height="308" key="GridCell.Tab.0.bottom/0.0.1500.960/3000.0.1920.1040@0.0.1500.960" timestamp="1585002923639" />
-    <state width="1900" height="202" key="GridCell.Tab.0.bottom/0.0.1500.960/3000.0.1920.1040@3000.0.1920.1040" timestamp="1585011753702" />
-    <state width="1900" height="202" key="GridCell.Tab.0.center" timestamp="1585011753702">
+    <state width="834" height="912" key="GridCell.Tab.0.bottom/0.0.1500.960/3000.0.1920.1040@3000.0.1920.1040" timestamp="1585280169596" />
+    <state width="834" height="912" key="GridCell.Tab.0.center" timestamp="1585280169595">
       <screen x="3000" y="0" width="1920" height="1040" />
     </state>
     <state width="1480" height="308" key="GridCell.Tab.0.center/0.0.1500.960/3000.0.1920.1040@0.0.1500.960" timestamp="1585002923639" />
-    <state width="1900" height="202" key="GridCell.Tab.0.center/0.0.1500.960/3000.0.1920.1040@3000.0.1920.1040" timestamp="1585011753702" />
-    <state width="1900" height="202" key="GridCell.Tab.0.left" timestamp="1585011753702">
+    <state width="834" height="912" key="GridCell.Tab.0.center/0.0.1500.960/3000.0.1920.1040@3000.0.1920.1040" timestamp="1585280169595" />
+    <state width="834" height="912" key="GridCell.Tab.0.left" timestamp="1585280169595">
       <screen x="3000" y="0" width="1920" height="1040" />
     </state>
     <state width="1480" height="308" key="GridCell.Tab.0.left/0.0.1500.960/3000.0.1920.1040@0.0.1500.960" timestamp="1585002923639" />
-    <state width="1900" height="202" key="GridCell.Tab.0.left/0.0.1500.960/3000.0.1920.1040@3000.0.1920.1040" timestamp="1585011753702" />
-    <state width="1900" height="202" key="GridCell.Tab.0.right" timestamp="1585011753702">
+    <state width="834" height="912" key="GridCell.Tab.0.left/0.0.1500.960/3000.0.1920.1040@3000.0.1920.1040" timestamp="1585280169595" />
+    <state width="834" height="912" key="GridCell.Tab.0.right" timestamp="1585280169596">
       <screen x="3000" y="0" width="1920" height="1040" />
     </state>
     <state width="1480" height="308" key="GridCell.Tab.0.right/0.0.1500.960/3000.0.1920.1040@0.0.1500.960" timestamp="1585002923639" />
-    <state width="1900" height="202" key="GridCell.Tab.0.right/0.0.1500.960/3000.0.1920.1040@3000.0.1920.1040" timestamp="1585011753702" />
+    <state width="834" height="912" key="GridCell.Tab.0.right/0.0.1500.960/3000.0.1920.1040@3000.0.1920.1040" timestamp="1585280169596" />
+    <state x="3656" y="344" key="com.intellij.ide.util.TipDialog" timestamp="1585343360601">
+      <screen x="3000" y="0" width="1920" height="1040" />
+    </state>
+    <state x="3656" y="344" key="com.intellij.ide.util.TipDialog/0.0.1500.960/3000.0.1920.1040@3000.0.1920.1040" timestamp="1585343360601" />
     <state x="0" y="246" width="1512" height="799" maximized="true" key="dock-window-1" timestamp="1585009764270">
       <screen x="0" y="0" width="1500" height="960" />
     </state>

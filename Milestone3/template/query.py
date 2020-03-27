@@ -156,115 +156,146 @@ class Query:
     """
     # Update a record with specified key and columns
     """
+
     def update(self, key, tran_id, *columns):
-        #columns will be stored in weird tuples need to fix
-        #UPDATE needs to change read in books to handle inderection
-        #ONLY EDIT TAIL PAGES (tail_list)
+        # columns will be stored in weird tuples need to fix
+        # UPDATE needs to change read in books to handle inderection
+        # ONLY EDIT TAIL PAGES (tail_list)
 
         # acquire exclusive lock first
-        if  self.table.acquire_lock(key, 1, tran_id):
-            RID = self.table.index[self.table.key].locate(key)
 
-            if RID == None:
-                return False
+        RID = self.table.index[self.table.key].locate(key)
 
-            location = self.table.page_directory[RID[0]] # returns [book num, row]
-            indirection_location = location
-
-            data = list(columns)
-
-            ######################## Latch process to ensure the tid counter only able to touch by one transaction at a time #####################################################
-            waittime = 0
-            while self.table.latch_tid == True:    # break the loop when not other thread using tid_counter
-                waittime += 1
-                #continue
-
-            self.table.latch_tid = True                 # lock the tid_counter to prevent other transaction touch it
-            self.table.tidcounter = self.table.tidcounter - 1
-            tid_count = self.table.tidcounter           # assign current tid-counter to a temp variable so that we can release the tid_counter's lock right after that
-            self.table.latch_tid = False                # finish using tid_counter for current transaction and release the lock
-
-            if waittime > 0:
-                print("Latching. Wait time:" + str(waittime))
-            ######################## Latch process to ensure the tid counter only able to touch by one transaction at a time #####################################################
-
-            pin_idx_list = []           #holds a list of idx that asosetate to  what has been pinned during update
-            tail_location = [-1, -1]    #for later use
-            tail_book_R_bp = -1         #for later use
-            new_record =[]              #for later use
-
-            """
-            step 1) were is the book located eather on disk or in buffer_pool? do a search
-            """
-            base_book_bp = self.table.set_book(location[0]) #now holds the location of where book is stored in bp
-            check_indirection =  self.table.buffer_pool.buffer[base_book_bp].get_indirection(location[1])
-            pin_idx_list.append(base_book_bp)
-
-
-
-
-            if check_indirection == 0:
-            #constructing the full new record
-                new_record = self.table.buffer_pool.buffer[base_book_bp].get_full_record(location[1])
-                for idx, i in enumerate(data):
-                    if i != None:
-                        new_record[idx + 5] = i
-                new_record[1] = tid_count #note that the rid of the base record is already in the BASE_ID_COLUMN thanks to insert
-
-
-            else: # there is indirection
-                tail_location = self.table.page_directory[check_indirection] #[Book num, row num]
-                tail_book_R_bp = self.table.set_book(tail_location[0])
-
-                new_record = self.table.buffer_pool.buffer[tail_book_R_bp].get_full_record(tail_location[1])
-                for idx, i in enumerate(data):
-                    if i != None:
-                        new_record[idx + 5] = i
-                new_record[INDIRECTION_COLUMN] = new_record[RID_COLUMN] # new record now points to the second newest record almost like a linked list
-                new_record[RID_COLUMN] = tid_count #note that the rid of the base record is already in the BASE_ID_COLUMN thanks to insert
-                self.table.buffer_pool.unpin(tail_book_R_bp)
-
-            """
-            NOW New_record holds the value that i wish to append to a tail book
-            """
-            indir_flag = self.table.buffer_pool.buffer[base_book_bp].book_indirection_flag
-            if indir_flag == -1: #need a new tail book
-                new_slot = self.table.make_room()   #make room
-                self.table.buffer_pool.buffer[new_slot] = Book(len(columns), self.table.book_index) #add book
-                location = self.table.buffer_pool.buffer[new_slot].book_insert(new_record)#add record to book
-                self.table.buffer_pool.buffer[base_book_bp].set_flag(self.table.book_index) #set indirection flag in base book
-
-                with writeLock:
-                    self.table.book_index += 1
-                pin_idx_list.append(new_slot)
-
-            else: #there is an availabe book to write to
-                slot = self.table.set_book(indir_flag) #bring tail book onto the bp
-                location = self.table.buffer_pool.buffer[slot].book_insert(new_record) #add record to book
-
-
-                pin_idx_list.append(slot)
-                if self.table.buffer_pool.buffer[slot].is_full(): # tail book is full set flag to -1
-                    self.table.buffer_pool.buffer[base_book_bp].set_flag(-1)
-
-                    #DOOOOO MERGE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    self.table.merge_queue.append(self.table.buffer_pool.buffer[slot].bookindex)
-
-
-            self.table.page_directory[tid_count] = location
-            #update base_book indirection with new TID
-            # This is to avoid updating while books are being swapped.
-            # Although this should rarely happen since merge waits for the book to be unused to swap books.
-            self.table.buffer_pool.buffer[base_book_bp].set_meta_zero(tid_count, indirection_location[1])
-
-            for i in pin_idx_list:
-                self.table.buffer_pool.unpin(i)
-
-            return True
-        else:
+        if RID == None:
             return False
 
+        location = self.table.page_directory[RID[0]]  # returns [book num, row]
+        indirection_location = location
 
+        data = list(columns)
+
+        ######################## Latch process to ensure the tid counter only able to touch by one transaction at a time #####################################################
+        waittime = 0
+        while self.table.latch_tid == True:  # break the loop when not other thread using tid_counter
+            waittime += 1
+            # continue
+
+        self.table.latch_tid = True  # lock the tid_counter to prevent other transaction touch it
+        self.table.tidcounter = self.table.tidcounter - 1
+        tid_count = self.table.tidcounter  # assign current tid-counter to a temp variable so that we can release the tid_counter's lock right after that
+        self.table.latch_tid = False  # finish using tid_counter for current transaction and release the lock
+
+        if waittime > 0:
+            print("@@@@@@@@@@@@@########################Latching. Wait time:" + str(waittime))
+        ######################## Latch process to ensure the tid counter only able to touch by one transaction at a time #####################################################
+
+        pin_idx_list = []  # holds a list of idx that asosetate to  what has been pinned during update
+        tail_location = [-1, -1]  # for later use
+        tail_book_R_bp = -1  # for later use
+        new_record = []  # for later use
+
+        """
+        step 1) were is the book located eather on disk or in buffer_pool? do a search
+        """
+        base_book_bp = self.table.set_book(location[0])  # now holds the location of where book is stored in bp
+        check_indirection = self.table.buffer_pool.buffer[base_book_bp].get_indirection(location[1])
+        pin_idx_list.append(base_book_bp)
+        self.table.buffer_pool.pin(base_book_bp)
+
+        if check_indirection == 0:
+            # constructing the full new record
+            new_record = self.table.buffer_pool.buffer[base_book_bp].get_full_record(location[1])
+            for idx, i in enumerate(data):
+                if i != None:
+                    new_record[idx + 5] = i
+            new_record[
+                1] = tid_count  # note that the rid of the base record is already in the BASE_ID_COLUMN thanks to insert
+
+
+        else:  # there is indirection
+            tail_location = self.table.page_directory[check_indirection]  # [Book num, row num]
+            tail_book_R_bp = self.table.set_book(tail_location[0])
+
+            new_record = self.table.buffer_pool.buffer[tail_book_R_bp].get_full_record(tail_location[1])
+            for idx, i in enumerate(data):
+                if i != None:
+                    new_record[idx + 5] = i
+            new_record[INDIRECTION_COLUMN] = new_record[
+                RID_COLUMN]  # new record now points to the second newest record almost like a linked list
+            new_record[
+                RID_COLUMN] = tid_count  # note that the rid of the base record is already in the BASE_ID_COLUMN thanks to insert
+            self.table.buffer_pool.unpin(tail_book_R_bp)
+
+        """
+        NOW New_record holds the value that i wish to append to a tail book
+        """
+        indir_flag = self.table.buffer_pool.buffer[base_book_bp].book_indirection_flag
+        if indir_flag == -1:  # need a new tail book
+            new_slot = self.table.make_room()  # make room
+            self.table.buffer_pool.buffer[new_slot] = Book(len(columns), self.table.book_index)  # add book
+
+            book_index = self.table.buffer_pool.buffer[new_slot].bookindex
+
+            count = 0
+            while book_index in self.table.latch_book and self.table.latch_book[book_index] == True:
+                count += 1
+                # continue
+            if count > 0:
+                print("@@@@@@@@@@@@@@@@@@@@book111111111111111111111111#########: " + str(count))
+
+            self.table.latch_book[book_index] = True
+
+            if self.table.acquire_lock(key, 1, tran_id):
+                location = self.table.buffer_pool.buffer[new_slot].book_insert(new_record)  # add record to book
+            else:
+                return False
+
+            self.table.latch_book[book_index] = False
+            self.table.buffer_pool.buffer[base_book_bp].set_flag(
+                self.table.book_index)  # set indirection flag in base book
+            # self.table.latch_book[book_index] = False
+
+            with writeLock:
+                self.table.book_index += 1
+            pin_idx_list.append(new_slot)
+
+        else:  # there is an availabe book to write to
+            slot = self.table.set_book(indir_flag)  # bring tail book onto the bp
+            book_index = self.table.buffer_pool.buffer[slot].bookindex
+
+            count = 0
+            while book_index in self.table.latch_book and self.table.latch_book[book_index] == True:
+                count += 1
+                # continue
+            if count > 0:
+                print("@@@@@@@@@@@@@@@@@@@@book222222222222222222222222###############: " + str(count))
+
+            self.table.latch_book[book_index] = True
+
+            if self.table.acquire_lock(key, 1, tran_id):
+                location = self.table.buffer_pool.buffer[slot].book_insert(new_record)  # add record to book
+            else:
+                return False
+
+            self.table.latch_book[book_index] = False
+
+            pin_idx_list.append(slot)
+            if self.table.buffer_pool.buffer[slot].is_full():  # tail book is full set flag to -1
+                self.table.buffer_pool.buffer[base_book_bp].set_flag(-1)
+
+                # DOOOOO MERGE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                self.table.merge_queue.append(self.table.buffer_pool.buffer[slot].bookindex)
+
+        self.table.page_directory[tid_count] = location
+        # update base_book indirection with new TID
+        # This is to avoid updating while books are being swapped.
+        # Although this should rarely happen since merge waits for the book to be unused to swap books.
+        self.table.buffer_pool.buffer[base_book_bp].set_meta_zero(tid_count, indirection_location[1])
+
+        for i in pin_idx_list:
+            self.table.buffer_pool.unpin(i)
+
+        return True
 
     """
     :param start_range: int         # Start of the key range to aggregate
@@ -309,24 +340,26 @@ class Query:
     # Returns False if no record matches key or if target record is locked by 2PL.
     """
     def increment(self, key, column, tran_id):
-        r = self.select(key, self.table.key, [1] * self.table.num_columns, tran_id)[0]
+        r = self.select(key, self.table.key, [1] * self.table.num_columns, tran_id)
         if r is not False:
+            r = r[0]     # assign the record to r when select() is not return false
             updated_columns = [None] * self.table.num_columns
             updated_columns[column] = r.columns[column] + 1
             u = self.update(key, tran_id, *updated_columns)
             return u
         return False
 
+
     def change_link(self, key):
         #PINS AND UNPINS and Dirty bit
         #i am assuming that we get the primary key but if we don't we will have to make small changes to the code to handle it
 
         rid = self.table.index[0].locate(key) #get the rid of the key
-        base_book_id, base_row = self.table.page_directory[rid] #get base book id and row of the base book record we wish to change the inderection
+        base_book_id, base_row, lock_list = self.table.page_directory[rid[0]] #get base book id and row of the base book record we wish to change the inderection
         base_book_bp = self.table.set_book(base_book_id)
 
         record_to_be_deleted_tid = self.table.buffer_pool.buffer[base_book_bp].get_indirection(base_row) #get the tid of the record we wish to get rid of
-        tail_book_id, tail_row = self.table.page_directory(record_to_be_deleted_tid) #get tail book info
+        tail_book_id, tail_row = self.table.page_directory[record_to_be_deleted_tid] #get tail book info
         tail_book_bp = self.table.set_book(tail_book_id)
         record = self.table.buffer_pool.buffer[tail_book_bp].get_full_record(tail_row)
 
@@ -337,20 +370,3 @@ class Query:
         self.table.buffer_pool.unpin(tail_book_bp)
         self.table.buffer_pool.unpin(base_book_bp)
         #############################################################
-
-        # tail_book_id,row = self.table.page_directory[tid] #get book id and row of the record we wish to remove
-        # tail_book_bp = self.table.set_book(tail_book_id) #make sure tail book is in bp
-        #
-        # record = self.table.buffer_pool.buffer[tail_book_bp].get_full_record(row) #get the full record
-        # self.table.buffer_pool.buffer[tail_book_bp].rid_to_zero(row) #set the delete veriable in the record we wish to get rid of
-        #
-        # previous_updated_record = record[INDIRECTION_COLUMN] # this is the prevous updated record that will now become the most current updated record
-        # base_record_rid = record[BASE_ID_COLUMN] # get the rid of the base record
-        #
-        # BRR_book_id, BRR_row = self.table.page_directory[base_record_rid] #get base book id and row of the base book record we wish to change the inderection
-        # base_book_bp = self.table.set_book(BRR_book_id) # make sure the base book is in the bp
-        #
-        # self.table.buffer_pool.buffer[base_book_bp].set_meta_zero(previous_updated_record, BRR_row)# change the inderection collumn of the base record
-        #
-        # self.table.buffer_pool.unpin(tail_book_bp)
-        # self.table.buffer_pool.unpin(base_book_bp)

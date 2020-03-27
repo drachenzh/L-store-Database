@@ -41,38 +41,47 @@ class Transaction:
 
     # This MUST return 0 if transaction is sucessful, else it must return 0
     def run(self):
-        print("~Transaction # " + str(self.transaction_id))
+        #print("~Transaction # " + str(self.transaction_id))
 
         for query, args in self.queries:
             key = args[0]
 
             exclusive = False
-            if query.__name__ == "increment":    # check if its write query
+            if query.__name__ == "increment":  # check if its write query
                 exclusive = True
 
-            if self.secure_lock(key, exclusive) == False:
+            #result = query(*args)
+
+
+            #print("Query Return Value: " + str(result))
+            # If the query has failed the transaction should abort
+            if self.table.acquire_lock(key, exclusive, self.transaction_id) == False:
+                #print("Query Return Value: " + str(result) + "    " + query.__name__)
                 print("Aborting transaciton #" + str(self.transaction_id))
                 return self.abort()
+            else:
+                result = query(*args)
 
-            if exclusive: # if we have secured a lock, pull the base and tail book and pin them
-                pin_list = self.table.pull_base_and_tail(key)
-                for pin in pin_list:
-                    self.pins.append(pin)
+                if query.__name__ == "increment":     # when successful acquire exclusive lock
+                    locky = (args[0], 1)
+                    self.locks.append(locky)
 
-            result = query(*args)      # calling the query and execute this query
-
-            if exclusive:
-                self.updates.append(key)
-
-                #query = Query(self.table)
+                    pin_list = self.table.pull_base_and_tail(args[0])    # pin the corresponding base book and tail book, release them after commit or abortion
+                    for pin in pin_list:
+                        self.table.buffer_pool.pin(pin)
+                        self.pins.append(pin)
+                    self.updates.append(args[0])
+                else:
+                    locky = (args[0], 0)
+                    self.locks.append(locky)
 
         return self.commit()
 
     # exclusive = lock_type    lock_type = false is shared   true = exlcusive
     def secure_lock(self, key, exclusive):
         locky = (key, exclusive)
-        if self.locks.__contains__(locky) or self.locks.__contains__((key, True)):
-            return True
+        # if self.locks.__contains__(locky) or self.locks.__contains__((key, True)):
+        #     return True
 
         if self.table.acquire_lock(key, exclusive, self.transaction_id):
             self.locks.append(locky)
