@@ -182,18 +182,20 @@ class Table:
         self.buffer_pool.unpin(base_bp)
         self.buffer_pool.unpin(tail_bp)
 
+
+# move the book from disk to buffer
     def pull_book(self, bookindex):
         slot = self.make_room()
-        print("PULLING BOOK: " + str(bookindex))
-        print("INTO INDEX" + str(slot))
+        #print("PULLING BOOK: " + str(bookindex))
+        #print("INTO INDEX" + str(slot))
         self.buffer_pool.buffer[slot] = self.pull_book_json(bookindex)
         return slot
 
 
-    #Makes room for a new book to be inserted into bp
+# Makes room for a new book to be inserted into bp and pin this spot
     def make_room(self):
         # Check if any empty slots
-        for idx, i in enumerate(self.buffer_pool.buffer):
+        for idx, i in enumerate(self.buffer_pool.buffer):   # traverse the whole buffer and find available spot
             if i == None:
                 self.buffer_pool.pin(idx)
                 return idx
@@ -230,6 +232,8 @@ class Table:
 
         return loaded_book
 
+
+# use to check if the given book index exist in the buffer pool
     def book_in_bp(self, bookid):
         for idx, i in enumerate(self.buffer_pool.buffer):
             if i != None:

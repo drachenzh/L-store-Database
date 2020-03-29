@@ -164,12 +164,12 @@ class Query:
 
         # acquire exclusive lock first
 
-        RID = self.table.index[self.table.key].locate(key)
+        RID = self.table.index[self.table.key].locate(key)   # rid is a list
 
         if RID == None:
             return False
 
-        location = self.table.page_directory[RID[0]]  # returns [book num, row]
+        location = self.table.page_directory[RID[0]]  # returns [book num, row, lock_list]    rid[0] has the most recent record
         indirection_location = location
 
         data = list(columns)
@@ -195,12 +195,11 @@ class Query:
         new_record = []  # for later use
 
         """
-        step 1) were is the book located eather on disk or in buffer_pool? do a search
+        step 1) were is the book located either on disk or in buffer_pool? do a search
         """
-        base_book_bp = self.table.set_book(location[0])  # now holds the location of where book is stored in bp
+        base_book_bp = self.table.set_book(location[0])  # get the buffer pool index of this basebook
         check_indirection = self.table.buffer_pool.buffer[base_book_bp].get_indirection(location[1])
         pin_idx_list.append(base_book_bp)
-        self.table.buffer_pool.pin(base_book_bp)
 
         if check_indirection == 0:
             # constructing the full new record
@@ -248,6 +247,8 @@ class Query:
             if self.table.acquire_lock(key, 1, tran_id):
                 location = self.table.buffer_pool.buffer[new_slot].book_insert(new_record)  # add record to book
             else:
+                self.table.buffer_pool.unpin(new_slot)
+                self.table.buffer_pool.unpin(pin_idx_list[0])
                 return False
 
             self.table.latch_book[book_index] = False
@@ -263,18 +264,20 @@ class Query:
             slot = self.table.set_book(indir_flag)  # bring tail book onto the bp
             book_index = self.table.buffer_pool.buffer[slot].bookindex
 
-            count = 0
+            # count = 0
             while book_index in self.table.latch_book and self.table.latch_book[book_index] == True:
-                count += 1
-                # continue
-            if count > 0:
-                print("@@@@@@@@@@@@@@@@@@@@book222222222222222222222222###############: " + str(count))
+                # count += 1
+                continue
+            # if count > 0:
+            #     print("@@@@@@@@@@@@@@@@@@@@book222222222222222222222222###############: " + str(count))
 
             self.table.latch_book[book_index] = True
 
             if self.table.acquire_lock(key, 1, tran_id):
                 location = self.table.buffer_pool.buffer[slot].book_insert(new_record)  # add record to book
             else:
+                self.table.buffer_pool.unpin(slot)
+                self.table.buffer_pool.unpin(pin_idx_list[0])
                 return False
 
             self.table.latch_book[book_index] = False
@@ -345,7 +348,7 @@ class Query:
             r = r[0]     # assign the record to r when select() is not return false
             updated_columns = [None] * self.table.num_columns
             updated_columns[column] = r.columns[column] + 1
-            u = self.update(key, tran_id, *updated_columns)
+            u = self.update(key, tran_id, *updated_columns)   # updated_columns is a list
             return u
         return False
 

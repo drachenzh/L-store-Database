@@ -4,7 +4,10 @@ from transaction import Transaction
 from transaction_worker import TransactionWorker
 
 import threading
+import time
 from random import choice, randint, sample, seed
+
+t0 = time.time()
 
 db = Database()
 db.open('ECS165')
@@ -62,6 +65,10 @@ num_committed_transactions = sum(t.result for t in transaction_workers)
 
 query = Query(grades_table)
 s = query.sum(keys[0], keys[-1], 1)
+
+t1 = time.time()
+total_time = t1-t0
+print("Total time: " + str(total_time))
 
 if s != num_committed_transactions * num_operations:
     print('Expected sum:', num_committed_transactions * num_operations, ', actual:', s, '. Failed.')
