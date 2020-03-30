@@ -14,11 +14,12 @@ class Book:
         else:
             self.bookindex = -1
             self.content = param
-        self.dirty_bit = False
+        self.dirty_bit = 0
         self.tps = (2**64) - 1
 
+# insert a new line of record to the book
     def book_insert(self, *columns):
-        self.dirty_bit = True
+        self.dirty_bit += 1
         columns = columns[0]
         if(len(columns) > len(self.content)):
             print("ERROR: Trying to insert too many columns")
@@ -30,7 +31,7 @@ class Book:
         return [self.bookindex, self.content[0].num_records - 1]
 
     def rid_to_zero(self, index):
-        self.dirty_bit = True
+        self.dirty_bit += 1
         self.content[1].delete(index)
 
     def get_indirection(self, index):
@@ -63,11 +64,11 @@ class Book:
         return record
 
     def set_flag(self, val):
-        self.dirty_bit = True
+        self.dirty_bit += 1
         self.book_indirection_flag = val
 
     def set_meta_zero(self, val, row):
-        self.dirty_bit = True
+        self.dirty_bit += 1
         self.content[0].update(val, row)
 
     #returns true if book is full.

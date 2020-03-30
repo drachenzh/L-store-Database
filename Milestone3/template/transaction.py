@@ -16,7 +16,7 @@ class Transaction:
         self.locks = []
         self.updates = []
         self.queries = []
-        self.pins = []
+        self.commit_pins = []
         self.transaction_id = inc_global_counter()
         self.table = last_table()
 
@@ -41,7 +41,7 @@ class Transaction:
 
     # This MUST return 0 if transaction is sucessful, else it must return 0
     def run(self):
-        # print("~Transaction # " + str(self.transaction_id))
+        print("~Transaction # " + str(self.transaction_id))
 
         for query, args in self.queries:
             result = query(*args)
@@ -54,11 +54,12 @@ class Transaction:
             else:
                 if query.__name__ == "increment":  # when successful acquire exclusive lock
                     self.secure_lock(args[0], True)
-                    # pin_list = self.table.pull_base_and_tail(args[
-                    #                                              0])  # pin the corresponding base book and tail book, release them after commit or abortion
-                    # for pin in pin_list:
-                    #     self.table.buffer_pool.pin(pin)
-                    #     self.pins.append(pin)
+
+                    commit_list = self.table.pull_base_and_tail(args[0])   # get the buffer pool index of base book and tail book
+                    for pin in commit_list:                        # mark this two position with uncommit
+                        self.table.buffer_pool.commit_pin[pin] += 1
+                        self.commit_pins.append(pin)
+
                     self.updates.append(args[0])
                 else:
                     self.secure_lock(args[0], False)
@@ -70,12 +71,7 @@ class Transaction:
         locky = (key, exclusive)
         if self.locks.__contains__(locky) or self.locks.__contains__((key, True)):
             return True
-
-        if self.table.acquire_lock(key, exclusive, self.transaction_id):
-            self.locks.append(locky)
-            return True
-
-        return False
+        self.locks.append(locky)
 
 
     def abort(self):
@@ -86,19 +82,19 @@ class Transaction:
             query.change_link(key)
 
         self.release_locks()
-       # self.release_pins()
+        self.uncommit_pins()
         return False
 
     def commit(self):
         # TODO: commit to database
 
         self.release_locks()
-        #self.release_pins()
+        self.uncommit_pins()
         return True
 
-    def release_pins(self):
-        for pin in self.pins:
-            self.table.buffer_pool.unpin(pin)
+    def uncommit_pins(self):
+        for pin in self.commit_pins:
+            self.table.buffer_pool.commit_pin[pin] -= 1
 
     def release_locks(self):
         for locky in self.locks:

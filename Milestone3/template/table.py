@@ -110,7 +110,7 @@ class Table:
                 return self.pull_book(bookid) #book is now in dp return its location in dp
 
     def push_book(self, ind):
-        if self.buffer_pool.buffer[ind] != None and self.buffer_pool.buffer[ind].dirty_bit == True:
+        if self.buffer_pool.buffer[ind] != None and self.buffer_pool.buffer[ind].dirty_bit > 0:
             temp = self.buffer_pool.buffer[ind]
             print("PUSHING BOOK: " + str(temp.bookindex))
             print("FROM INDEX: " + str(ind))
@@ -200,16 +200,15 @@ class Table:
                 self.buffer_pool.pin(idx)
                 return idx
 
-        # if no empty slots
-        # replacement time, find LRU
+        # when the buffer pool is full, find the replacement position
         slot = self.buffer_pool.find_LRU()
 
         # Now slot is ready to be pulled to
         self.buffer_pool.pin(slot)
 
         # if the book is dirty
-        self.push_book(slot)
-
+        if self.buffer_pool.buffer[slot].dirty_bit > 0:
+           self.push_book(slot)
 
         return slot
 

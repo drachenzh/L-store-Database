@@ -17,7 +17,7 @@ keys = []
 records = {}
 num_threads = 8
 seed(8739878934)
-num_records = 10000
+num_records = 1000
 num_transactions = 1000
 num_operations = 5
 

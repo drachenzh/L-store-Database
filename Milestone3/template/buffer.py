@@ -7,8 +7,8 @@ class Buffer:
         self.buffer_size = 40
         self.book_range = 1
         self.buffer = [None]*self.buffer_size
-        #self.LRU_tracker = [None]*self.buffer_size  #least resently used makes it so we can keep track of old non-used books with time stamps
         self.lru_cache = LRU_cache(self.buffer_size)
+        self.commit_pin = [0] * self.buffer_size
         self.pins = [0]*self.buffer_size
         self.latchs = [0]*self.buffer_size
         self.key = key

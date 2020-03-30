@@ -207,8 +207,7 @@ class Query:
             for idx, i in enumerate(data):
                 if i != None:
                     new_record[idx + 5] = i
-            new_record[
-                1] = tid_count  # note that the rid of the base record is already in the BASE_ID_COLUMN thanks to insert
+            new_record[1] = tid_count  # note that the rid of the base record is already in the BASE_ID_COLUMN thanks to insert
 
 
         else:  # there is indirection
@@ -219,10 +218,8 @@ class Query:
             for idx, i in enumerate(data):
                 if i != None:
                     new_record[idx + 5] = i
-            new_record[INDIRECTION_COLUMN] = new_record[
-                RID_COLUMN]  # new record now points to the second newest record almost like a linked list
-            new_record[
-                RID_COLUMN] = tid_count  # note that the rid of the base record is already in the BASE_ID_COLUMN thanks to insert
+            new_record[INDIRECTION_COLUMN] = new_record[RID_COLUMN]  # new record now points to the second newest record almost like a linked list
+            new_record[RID_COLUMN] = tid_count  # note that the rid of the base record is already in the BASE_ID_COLUMN thanks to insert
             self.table.buffer_pool.unpin(tail_book_R_bp)
 
         """
@@ -252,8 +249,7 @@ class Query:
                 return False
 
             self.table.latch_book[book_index] = False
-            self.table.buffer_pool.buffer[base_book_bp].set_flag(
-                self.table.book_index)  # set indirection flag in base book
+            self.table.buffer_pool.buffer[base_book_bp].set_flag(self.table.book_index)  # set indirection flag in base book
             # self.table.latch_book[book_index] = False
 
             with writeLock:
@@ -369,6 +365,9 @@ class Query:
         previous_updated_record = record[INDIRECTION_COLUMN]  #get the prevous updated record
         self.table.buffer_pool.buffer[tail_book_bp].rid_to_zero(tail_row)
         self.table.buffer_pool.buffer[base_book_bp].set_meta_zero(previous_updated_record, base_row)# change the inderection collumn of the base record
+        self.table.buffer_pool.buffer[base_book_bp].dirty_bit -= 2
+        self.table.buffer_pool.buffer[tail_book_bp].dirty_bit -= 2
+
 
         self.table.buffer_pool.unpin(tail_book_bp)
         self.table.buffer_pool.unpin(base_book_bp)
